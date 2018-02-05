@@ -1,6 +1,7 @@
 # yeelight-skill
 Control Xiaomi Yeelight with Mycroft
 
-You must enable LAN Control for your device
-
-Requires this support package (https://github.com/skorokithakis/python-yeelight)
+## Requirements
+- [Mycroft](https://docs.mycroft.ai/installing.and.running/installation)
+- [python-yeelight](https://github.com/skorokithakis/python-yeelight)
+- LAN Control must be Enabled on your yeelight device
