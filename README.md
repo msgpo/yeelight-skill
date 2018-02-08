@@ -15,3 +15,5 @@ platform_picroft
 - [Mycroft](https://docs.mycroft.ai/installing.and.running/installation)
 - [python-yeelight](https://github.com/skorokithakis/python-yeelight)
 - LAN Control must be Enabled on your yeelight device
+## Further Reading
+- [Yeelight API] (https://yeelight.readthedocs.io/en/stable/)
