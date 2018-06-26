@@ -7,6 +7,8 @@ Utilize the Yeelight API and Python library for controlling YeeLight WiFi RGB bu
 * "turn lights on"
 * "turn lights off"
 * "dim the lights"
+* "set lights to 50%"
+* "set light color to red"
 ## Credits
 PCWii
 ## Require 
