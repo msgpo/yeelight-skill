@@ -101,7 +101,7 @@ class YeeLightSkill(MycroftSkill):
                 bulbLHS.set_rgb(myRed, myGreen, myBlue)
                 sleep(1)
                 bulbRHS.set_rgb(myRed, myGreen, myBlue)
-                self.speak_dialog("light.set", data ={"result": findcolor + " percent"})
+                self.speak_dialog("light.set", data ={"result": findcolor + ", percent"})
                 break
         strLevel = re.findall('\d+', strRemainder)
         if strLevel:
