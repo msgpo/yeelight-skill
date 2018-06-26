@@ -1,0 +1,120 @@
+#!/usr/bin/env python
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Mycroft Core.  If not, see <http://www.gnu.org/licenses/>.
+
+from os.path import dirname
+from adapt.intent import IntentBuilder
+from mycroft.skills.core import MycroftSkill
+from mycroft.util.log import getLogger
+from yeelight import Bulb
+from time import sleep
+from colour import Color
+import math
+
+
+__author__ = 'PCWii'
+
+# Logger: used for debug lines, like "LOGGER.debug(xyz)". These
+# statements will show up in the command line when running Mycroft.
+LOGGER = getLogger(__name__)
+
+# List each of the bulbs here
+
+bulbRHS = Bulb("192.168.0.50")
+bulbLHS = Bulb("192.168.0.51")
+Valid_Color = ['red', 'green', 'blue', 'yellow', 'orange', 'purple', 'white']
+
+# The logic of each skill is contained within its own class, which inherits
+# base methods from the MycroftSkill class with the syntax you can see below:
+# "class ____Skill(MycroftSkill)"
+class YeeLightSkill(MycroftSkill):
+
+    # The constructor of the skill, which calls MycroftSkill's constructor
+    def __init__(self):
+        super(YeeLightSkill, self).__init__(name="YeeLightSkill")
+
+    # This method loads the files needed for the skill's functioning, and
+    # creates and registers each intent that the skill uses
+    def initialize(self):
+        self.load_data_files(dirname(__file__))
+
+        yee_light_on_intent = IntentBuilder("YeeLightOnIntent").\
+            require("DeviceKeyword").require("OnKeyword").\
+            optionally("LightKeyword").build()
+        self.register_intent(yee_light_on_intent, self.handle_yee_light_on_intent)
+
+        yee_light_off_intent = IntentBuilder("YeeLightOffIntent").\
+            require("DeviceKeyword").require("OffKeyword").\
+            optionally("LightKeyword").build()
+        self.register_intent(yee_light_off_intent, self.handle_yee_light_off_intent)
+
+        yee_light_dim_intent = IntentBuilder("YeeLightDimIntent").\
+            require("DeviceKeyword").require("DimKeyword").\
+            optionally("LightKeyword").build()
+        self.register_intent(yee_light_dim_intent, self.handle_yee_light_dim_intent)
+
+        yee_light_set_intent = IntentBuilder("YeeLightSetIntent").\
+            require("SetKeyword").require("DeviceKeyword").\
+            optionally("Lightkeyword").build()
+        self.register_intent(yee_light_set_intent, self.handle_yee_light_set_intent)
+
+
+    # The "handle_xxxx_intent" functions define Mycroft's behavior when
+    # each of the skill's intents is triggered: in this case, he simply
+    # speaks a response. Note that the "speak_dialog" method doesn't
+    # actually speak the text it's passed--instead, that text is the filename
+    # of a file in the dialog folder, and Mycroft speaks its contents when
+    # the method is called.
+    def handle_yee_light_on_intent(self, message):
+        bulbRHS.turn_on()
+        sleep(1)
+        bulbLHS.turn_on()
+        sleep(1)
+        bulbRHS.set_brightness(100, duration=5000)
+        sleep(1)
+        bulbLHS.set_brightness(100, duration=5000)
+        self.speak_dialog("light.on")
+
+    def handle_yee_light_off_intent(self, message):
+        bulbRHS.turn_off(duration=5000)
+        sleep(1)
+        bulbLHS.turn_off(duration=5000)
+        self.speak_dialog("light.off")
+
+    def handle_yee_light_dim_intent(self, message):
+        bulbRHS.set_brightness(5, duration=5000)
+        sleep(1)
+        bulbLHS.set_brightness(5, duration=5000)
+        self.speak_dialog("wall.light.dim")
+
+    def handle_yee_light_set_intent(self, message):
+        strRemainder = str(message.utterance_remainder())
+        for findcolor in Valid_Color:
+            mypos = strRemainder.find(findcolor)
+            if mypos > 0:
+                myRed = math.trunc(Color(findcolor).get_red() * 255)
+                myGreen = math.trunc(Color(findcolor).get_green() * 255)
+                myBlue = math.trunc(Color(findcolor).get_blue() * 255)
+                bulbLHS.set_rgb(myRed, myGreen, myBlue)
+                sleep(1)
+                bulbRHS.set_rgb(myRed, myGreen, myBlue)
+                break
+        strLevel = re.findall('\d+', strRemainder)
+        if strLevel:
+            bulbLHS.set_brightness(strLevel[0], duration=5000)
+            sleep(1)
+            bulbRHS.set_brightness(strLevel[0], duration=5000)
+
+    # The "stop" method defines what Mycroft does when told to stop during
+    # the skill's execution. In this case, since the skill's functionality
+    # is extremely simple, the method just contains the keyword "pass", which
+    # does nothing.
+    def stop(self):
+        pass
+
+# The "create_skill()" method is used to create an instance of the skill.
+# Note that it's outside the class itself.
+def create_skill():
+    return YeeLightSkill()
