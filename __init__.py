@@ -12,6 +12,7 @@ from yeelight import Bulb
 from time import sleep
 from colour import Color
 import math
+import re
 
 
 __author__ = 'PCWii'
