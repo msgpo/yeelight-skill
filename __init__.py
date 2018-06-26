@@ -87,7 +87,7 @@ class YeeLightSkill(MycroftSkill):
         bulbRHS.set_brightness(5, duration=5000)
         sleep(1)
         bulbLHS.set_brightness(5, duration=5000)
-        self.speak_dialog("wall.light.dim")
+        self.speak_dialog("light.dim")
 
     def handle_yee_light_set_intent(self, message):
         strRemainder = str(message.utterance_remainder())
@@ -100,12 +100,14 @@ class YeeLightSkill(MycroftSkill):
                 bulbLHS.set_rgb(myRed, myGreen, myBlue)
                 sleep(1)
                 bulbRHS.set_rgb(myRed, myGreen, myBlue)
+                self.speak_dialog("light.set", data ={"result": findcolor + " percent"})
                 break
         strLevel = re.findall('\d+', strRemainder)
         if strLevel:
             bulbLHS.set_brightness(strLevel[0], duration=5000)
             sleep(1)
             bulbRHS.set_brightness(strLevel[0], duration=5000)
+            self.speak_dialog("light.set", data={"result": str(strLevel[0])})
 
     # The "stop" method defines what Mycroft does when told to stop during
     # the skill's execution. In this case, since the skill's functionality
