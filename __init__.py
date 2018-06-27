@@ -52,7 +52,7 @@ class YeeLightSkill(MycroftSkill):
         self.register_intent(yee_light_off_intent, self.handle_yee_light_off_intent)
 
         yee_light_dim_intent = IntentBuilder("YeeLightDimIntent").\
-            require("DeviceKeyword").require("DimKeyword").\
+            require("DimKeyword").require("DeviceKeyword").\
             optionally("LightKeyword").build()
         self.register_intent(yee_light_dim_intent, self.handle_yee_light_dim_intent)
 
