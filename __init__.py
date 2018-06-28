@@ -105,9 +105,9 @@ class YeeLightSkill(MycroftSkill):
                 break
         dim_level = re.findall('\d+', str_remainder)
         if dim_level:
-            bulbLHS.set_brightness(dim_level[0], duration=5000)
+            bulbLHS.set_brightness(int(dim_level[0]), duration=5000)
             sleep(1)
-            bulbRHS.set_brightness(dim_level[0], duration=5000)
+            bulbRHS.set_brightness(int(dim_level[0]), duration=5000)
             self.speak_dialog("light.set", data={"result": str(dim_level[0])+ ", percent"})
 
     # The "stop" method defines what Mycroft does when told to stop during
