@@ -27,7 +27,7 @@ effect_delay = 3000
 
 bulbRHS = Bulb("192.168.0.50")
 bulbLHS = Bulb("192.168.0.51")
-Valid_Color = ['red', 'green', 'blue', 'yellow', 'orange', 'purple', 'white']
+Valid_Color = ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet', 'purple', 'white']
 
 # The logic of each skill is contained within its own class, which inherits
 # base methods from the MycroftSkill class with the syntax you can see below:
