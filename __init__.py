@@ -22,6 +22,8 @@ __author__ = 'PCWii'
 LOGGER = getLogger(__name__)
 
 # List each of the bulbs here
+seq_delay = 0.5
+effect_delay = 3000
 
 bulbRHS = Bulb("192.168.0.50")
 bulbLHS = Bulb("192.168.0.51")
@@ -70,24 +72,28 @@ class YeeLightSkill(MycroftSkill):
     # the method is called.
     def handle_yee_light_on_intent(self, message):
         bulbRHS.turn_on()
-        sleep(1)
+        sleep(seq_delay)
         bulbLHS.turn_on()
-        sleep(1)
-        bulbRHS.set_brightness(100, duration=5000)
-        sleep(1)
-        bulbLHS.set_brightness(100, duration=5000)
+        sleep(seq_delay)
+        bulbLHS.set_rgb(255, 255, 255)
+        sleep(seq_delay)
+        bulbRHS.set_rgb(255, 255, 255)
+        sleep(seq_delay)
+        bulbRHS.set_brightness(100, duration=effect_delay)
+        sleep(seq_delay)
+        bulbLHS.set_brightness(100, duration=effect_delay)
         self.speak_dialog("light.on")
 
     def handle_yee_light_off_intent(self, message):
-        bulbRHS.turn_off(duration=5000)
-        sleep(1)
-        bulbLHS.turn_off(duration=5000)
+        bulbRHS.turn_off(duration=effect_delay)
+        sleep(seq_delay)
+        bulbLHS.turn_off(duration=effect_delay)
         self.speak_dialog("light.off")
 
     def handle_yee_light_dim_intent(self, message):
-        bulbRHS.set_brightness(5, duration=5000)
-        sleep(1)
-        bulbLHS.set_brightness(5, duration=5000)
+        bulbRHS.set_brightness(5, duration=effect_delay)
+        sleep(seq_delay)
+        bulbLHS.set_brightness(5, duration=effect_delay)
         self.speak_dialog("light.dim")
 
     def handle_yee_light_set_intent(self, message):
@@ -99,15 +105,15 @@ class YeeLightSkill(MycroftSkill):
                 myGreen = math.trunc(Color(findcolor).get_green() * 255)
                 myBlue = math.trunc(Color(findcolor).get_blue() * 255)
                 bulbLHS.set_rgb(myRed, myGreen, myBlue)
-                sleep(1)
+                sleep(seq_delay)
                 bulbRHS.set_rgb(myRed, myGreen, myBlue)
                 self.speak_dialog("light.set", data ={"result": findcolor})
                 break
         dim_level = re.findall('\d+', str_remainder)
         if dim_level:
-            bulbLHS.set_brightness(int(dim_level[0]), duration=5000)
-            sleep(1)
-            bulbRHS.set_brightness(int(dim_level[0]), duration=5000)
+            bulbLHS.set_brightness(int(dim_level[0]), duration=effect_delay)
+            sleep(seq_delay)
+            bulbRHS.set_brightness(int(dim_level[0]), duration=effect_delay)
             self.speak_dialog("light.set", data={"result": str(dim_level[0])+ ", percent"})
 
     # The "stop" method defines what Mycroft does when told to stop during
