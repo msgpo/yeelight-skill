@@ -27,7 +27,7 @@ effect_delay = 3000
 
 bulbRHS = Bulb("192.168.0.50")
 bulbLHS = Bulb("192.168.0.51")
-Valid_Color = ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet', 'purple', 'white']
+Valid_Color = ['red', 'read', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet', 'purple', 'white']
 
 # The logic of each skill is contained within its own class, which inherits
 # base methods from the MycroftSkill class with the syntax you can see below:
@@ -101,6 +101,8 @@ class YeeLightSkill(MycroftSkill):
         for findcolor in Valid_Color:
             mypos = str_remainder.find(findcolor)
             if mypos > 0:
+                if findcolor == 'read':
+                    findcolor = 'red'
                 myRed = math.trunc(Color(findcolor).get_red() * 255)
                 myGreen = math.trunc(Color(findcolor).get_green() * 255)
                 myBlue = math.trunc(Color(findcolor).get_blue() * 255)
