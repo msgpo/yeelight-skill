@@ -38,6 +38,7 @@ class YeeLightSkill(MycroftSkill):
     # The constructor of the skill, which calls MycroftSkill's constructor
     def __init__(self):
         super(YeeLightSkill, self).__init__(name="YeeLightSkill")
+        self.error_code = 0
 
     # This method loads the files needed for the skill's functioning, and
     # creates and registers each intent that the skill uses
@@ -72,15 +73,18 @@ class YeeLightSkill(MycroftSkill):
     # of a file in the dialog folder, and Mycroft speaks its contents when
     # the method is called.
     def handle_yee_light_on_intent(self, message):
+        self.error_code = 0
         try:
             bulbRHS.turn_on()
         except Exception as e:
+            self.error_code += 1
             LOG.error(e)
             self.speak_dialog("error", data={"result": "right hand side,"})
         sleep(seq_delay)
         try:
             bulbLHS.turn_on()
         except Exception as e:
+            self.error_code += 1
             LOG.error(e)
             self.speak_dialog("error", data={"result": "left hand side,"})
         #sleep(seq_delay)
@@ -91,37 +95,47 @@ class YeeLightSkill(MycroftSkill):
         #bulbRHS.set_brightness(100, duration=effect_delay)
         #sleep(seq_delay)
         #bulbLHS.set_brightness(100, duration=effect_delay)
-        self.speak_dialog("light.on")
+        if self.error_code == 0:
+            self.speak_dialog("light.on")
 
     def handle_yee_light_off_intent(self, message):
+        self.error_code = 0
         try:
             bulbRHS.turn_off(duration=effect_delay)
         except Exception as e:
+            self.error_code += 1
             LOG.error(e)
             self.speak_dialog("error", data={"result": "right hand side,"})
         sleep(seq_delay)
         try:
             bulbLHS.turn_off(duration=effect_delay)
         except Exception as e:
+            self.error_code += 1
             LOG.error(e)
             self.speak_dialog("error", data={"result": "left hand side,"})
-        self.speak_dialog("light.off")
+        if self.error_code == 0:
+            self.speak_dialog("light.off")
 
     def handle_yee_light_dim_intent(self, message):
+        self.error_code = 0
         try:
             bulbRHS.set_brightness(5, duration=effect_delay)
         except Exception as e:
+            self.error_code += 1
             LOG.error(e)
             self.speak_dialog("error", data={"result": "right hand side,"})
         sleep(seq_delay)
         try:
             bulbLHS.set_brightness(5, duration=effect_delay)
         except Exception as e:
+            self.error_code += 1
             LOG.error(e)
             self.speak_dialog("error", data={"result": "left hand side,"})
-        self.speak_dialog("light.dim")
+        if self.error_code == 0:
+            self.speak_dialog("light.dim")
 
     def handle_yee_light_set_intent(self, message):
+        self.error_code = 0
         str_remainder = str(message.utterance_remainder())
         for findcolor in Valid_Color:
             mypos = str_remainder.find(findcolor)
@@ -134,30 +148,37 @@ class YeeLightSkill(MycroftSkill):
                 try:
                     bulbLHS.set_rgb(myRed, myGreen, myBlue)
                 except Exception as e:
+                    self.error_code += 1
                     LOG.error(e)
                     self.speak_dialog("error", data={"result": "left hand side,"})
                 sleep(seq_delay)
                 try:
                     bulbRHS.set_rgb(myRed, myGreen, myBlue)
                 except Exception as e:
+                    self.error_code += 1
                     LOG.error(e)
                     self.speak_dialog("error", data={"result": "right hand side,"})
-                self.speak_dialog("light.set", data ={"result": findcolor})
+                if self.error_code == 0:
+                    self.speak_dialog("light.set", data ={"result": findcolor})
                 break
         dim_level = re.findall('\d+', str_remainder)
         if dim_level:
+            self.error_code = 0
             try:
                 bulbLHS.set_brightness(int(dim_level[0]), duration=effect_delay)
             except Exception as e:
+                self.error_code += 1
                 LOG.error(e)
                 self.speak_dialog("error", data={"result": "left hand side,"})
             sleep(seq_delay)
             try:
                 bulbRHS.set_brightness(int(dim_level[0]), duration=effect_delay)
             except Exception as e:
+                self.error_code += 1
                 LOG.error(e)
                 self.speak_dialog("error", data={"result": "right hand side,"})
-            self.speak_dialog("light.set", data={"result": str(dim_level[0])+ ", percent"})
+            if self.error_code == 0:
+                self.speak_dialog("light.set", data={"result": str(dim_level[0])+ ", percent"})
 
     # The "stop" method defines what Mycroft does when told to stop during
     # the skill's execution. In this case, since the skill's functionality
