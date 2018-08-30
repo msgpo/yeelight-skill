@@ -8,6 +8,7 @@ from os.path import dirname
 from adapt.intent import IntentBuilder
 from mycroft.skills.core import MycroftSkill
 from mycroft.util.log import getLogger
+from mycroft.util.log import LOG
 from yeelight import Bulb
 from time import sleep
 from colour import Color
@@ -71,9 +72,17 @@ class YeeLightSkill(MycroftSkill):
     # of a file in the dialog folder, and Mycroft speaks its contents when
     # the method is called.
     def handle_yee_light_on_intent(self, message):
-        bulbRHS.turn_on()
+        try:
+            bulbRHS.turn_on()
+        except Exception as e:
+            LOG.error(e)
+            self.speak_dialog("error", data={"result": "right hand side,"})
         sleep(seq_delay)
-        bulbLHS.turn_on()
+        try:
+            bulbLHS.turn_on()
+        except Exception as e:
+            LOG.error(e)
+            self.speak_dialog("error", data={"result": "left hand side,"})
         #sleep(seq_delay)
         #bulbLHS.set_rgb(255, 255, 255)
         #sleep(seq_delay)
@@ -85,15 +94,31 @@ class YeeLightSkill(MycroftSkill):
         self.speak_dialog("light.on")
 
     def handle_yee_light_off_intent(self, message):
-        bulbRHS.turn_off(duration=effect_delay)
+        try:
+            bulbRHS.turn_off(duration=effect_delay)
+        except Exception as e:
+            LOG.error(e)
+            self.speak_dialog("error", data={"result": "right hand side,"})
         sleep(seq_delay)
-        bulbLHS.turn_off(duration=effect_delay)
+        try:
+            bulbLHS.turn_off(duration=effect_delay)
+        except Exception as e:
+            LOG.error(e)
+            self.speak_dialog("error", data={"result": "left hand side,"})
         self.speak_dialog("light.off")
 
     def handle_yee_light_dim_intent(self, message):
-        bulbRHS.set_brightness(5, duration=effect_delay)
+        try:
+            bulbRHS.set_brightness(5, duration=effect_delay)
+        except Exception as e:
+            LOG.error(e)
+            self.speak_dialog("error", data={"result": "right hand side,"})
         sleep(seq_delay)
-        bulbLHS.set_brightness(5, duration=effect_delay)
+        try:
+            bulbLHS.set_brightness(5, duration=effect_delay)
+        except Exception as e:
+            LOG.error(e)
+            self.speak_dialog("error", data={"result": "left hand side,"})
         self.speak_dialog("light.dim")
 
     def handle_yee_light_set_intent(self, message):
@@ -106,16 +131,32 @@ class YeeLightSkill(MycroftSkill):
                 myRed = math.trunc(Color(findcolor).get_red() * 255)
                 myGreen = math.trunc(Color(findcolor).get_green() * 255)
                 myBlue = math.trunc(Color(findcolor).get_blue() * 255)
-                bulbLHS.set_rgb(myRed, myGreen, myBlue)
+                try:
+                    bulbLHS.set_rgb(myRed, myGreen, myBlue)
+                except Exception as e:
+                    LOG.error(e)
+                    self.speak_dialog("error", data={"result": "left hand side,"})
                 sleep(seq_delay)
-                bulbRHS.set_rgb(myRed, myGreen, myBlue)
+                try:
+                    bulbRHS.set_rgb(myRed, myGreen, myBlue)
+                except Exception as e:
+                    LOG.error(e)
+                    self.speak_dialog("error", data={"result": "right hand side,"})
                 self.speak_dialog("light.set", data ={"result": findcolor})
                 break
         dim_level = re.findall('\d+', str_remainder)
         if dim_level:
-            bulbLHS.set_brightness(int(dim_level[0]), duration=effect_delay)
+            try:
+                bulbLHS.set_brightness(int(dim_level[0]), duration=effect_delay)
+            except Exception as e:
+                LOG.error(e)
+                self.speak_dialog("error", data={"result": "left hand side,"})
             sleep(seq_delay)
-            bulbRHS.set_brightness(int(dim_level[0]), duration=effect_delay)
+            try:
+                bulbRHS.set_brightness(int(dim_level[0]), duration=effect_delay)
+            except Exception as e:
+                LOG.error(e)
+                self.speak_dialog("error", data={"result": "right hand side,"})
             self.speak_dialog("light.set", data={"result": str(dim_level[0])+ ", percent"})
 
     # The "stop" method defines what Mycroft does when told to stop during
