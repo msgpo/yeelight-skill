@@ -47,22 +47,26 @@ class YeeLightSkill(MycroftSkill):
 
         yee_light_on_intent = IntentBuilder("YeeLightOnIntent").\
             require("DeviceKeyword").require("OnKeyword").\
-            optionally("LightKeyword").build()
+            optionally("LightKeyword").\
+            optionally("SilentKeyword").build()
         self.register_intent(yee_light_on_intent, self.handle_yee_light_on_intent)
 
         yee_light_off_intent = IntentBuilder("YeeLightOffIntent").\
             require("DeviceKeyword").require("OffKeyword").\
-            optionally("LightKeyword").build()
+            optionally("LightKeyword").\
+            optionally("SilentKeyword").build()
         self.register_intent(yee_light_off_intent, self.handle_yee_light_off_intent)
 
         yee_light_dim_intent = IntentBuilder("YeeLightDimIntent").\
             require("DimKeyword").require("DeviceKeyword").\
-            optionally("LightKeyword").build()
+            optionally("LightKeyword").\
+            optionally("SilentKeyword").build()
         self.register_intent(yee_light_dim_intent, self.handle_yee_light_dim_intent)
 
         yee_light_set_intent = IntentBuilder("YeeLightSetIntent").\
             require("SetKeyword").require("DeviceKeyword").\
-            optionally("Lightkeyword").build()
+            optionally("LightKeyword"). \
+            optionally("SilentKeyword").build()
         self.register_intent(yee_light_set_intent, self.handle_yee_light_set_intent)
 
 
@@ -73,6 +77,7 @@ class YeeLightSkill(MycroftSkill):
     # of a file in the dialog folder, and Mycroft speaks its contents when
     # the method is called.
     def handle_yee_light_on_intent(self, message):
+        silent_kw = message.data.get("SilentKeyword")
         self.error_code = 0
         try:
             bulbRHS.turn_on()
@@ -96,9 +101,11 @@ class YeeLightSkill(MycroftSkill):
         #sleep(seq_delay)
         #bulbLHS.set_brightness(100, duration=effect_delay)
         if self.error_code == 0:
-            self.speak_dialog("light.on")
+            if not silent_kw:
+                self.speak_dialog("light.on")
 
     def handle_yee_light_off_intent(self, message):
+        silent_kw = message.data.get("SilentKeyword")
         self.error_code = 0
         try:
             bulbRHS.turn_off(duration=effect_delay)
@@ -114,9 +121,11 @@ class YeeLightSkill(MycroftSkill):
             LOG.error(e)
             self.speak_dialog("error", data={"result": "left hand side,"})
         if self.error_code == 0:
-            self.speak_dialog("light.off")
+            if not silent_kw:
+                self.speak_dialog("light.off")
 
     def handle_yee_light_dim_intent(self, message):
+        silent_kw = message.data.get("SilentKeyword")
         self.error_code = 0
         try:
             bulbRHS.set_brightness(5, duration=effect_delay)
@@ -132,9 +141,11 @@ class YeeLightSkill(MycroftSkill):
             LOG.error(e)
             self.speak_dialog("error", data={"result": "left hand side,"})
         if self.error_code == 0:
-            self.speak_dialog("light.dim")
+            if not silent_kw:
+                self.speak_dialog("light.dim")
 
     def handle_yee_light_set_intent(self, message):
+        silent_kw = message.data.get("SilentKeyword")
         self.error_code = 0
         str_remainder = str(message.utterance_remainder())
         for findcolor in Valid_Color:
@@ -159,7 +170,8 @@ class YeeLightSkill(MycroftSkill):
                     LOG.error(e)
                     self.speak_dialog("error", data={"result": "right hand side,"})
                 if self.error_code == 0:
-                    self.speak_dialog("light.set", data ={"result": findcolor})
+                    if not silent_kw:
+                        self.speak_dialog("light.set", data ={"result": findcolor})
                 break
         dim_level = re.findall('\d+', str_remainder)
         if dim_level:
@@ -178,7 +190,8 @@ class YeeLightSkill(MycroftSkill):
                 LOG.error(e)
                 self.speak_dialog("error", data={"result": "right hand side,"})
             if self.error_code == 0:
-                self.speak_dialog("light.set", data={"result": str(dim_level[0])+ ", percent"})
+                if not silent_kw:
+                    self.speak_dialog("light.set", data={"result": str(dim_level[0])+ ", percent"})
 
     # The "stop" method defines what Mycroft does when told to stop during
     # the skill's execution. In this case, since the skill's functionality
