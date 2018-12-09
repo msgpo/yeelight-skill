@@ -30,6 +30,7 @@ bulbRHS = Bulb("192.168.0.50")
 bulbLHS = Bulb("192.168.0.51")
 Valid_Color = ['red', 'read', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet', 'purple', 'white']
 
+
 # The logic of each skill is contained within its own class, which inherits
 # base methods from the MycroftSkill class with the syntax you can see below:
 # "class ____Skill(MycroftSkill)"
@@ -68,7 +69,6 @@ class YeeLightSkill(MycroftSkill):
             optionally("LightKeyword"). \
             optionally("SilentKeyword").build()
         self.register_intent(yee_light_set_intent, self.handle_yee_light_set_intent)
-
 
     # The "handle_xxxx_intent" functions define Mycroft's behavior when
     # each of the skill's intents is triggered: in this case, he simply
@@ -191,7 +191,7 @@ class YeeLightSkill(MycroftSkill):
                 self.speak_dialog("error", data={"result": "right hand side,"})
             if self.error_code == 0:
                 if not silent_kw:
-                    self.speak_dialog("light.set", data={"result": str(dim_level[0])+ ", percent"})
+                    self.speak_dialog("light.set", data={"result": str(dim_level[0]) + ", percent"})
 
     # The "stop" method defines what Mycroft does when told to stop during
     # the skill's execution. In this case, since the skill's functionality
@@ -199,6 +199,7 @@ class YeeLightSkill(MycroftSkill):
     # does nothing.
     def stop(self):
         pass
+
 
 # The "create_skill()" method is used to create an instance of the skill.
 # Note that it's outside the class itself.
