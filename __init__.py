@@ -84,14 +84,16 @@ class YeeLightSkill(MycroftSkill):
         except Exception as e:
             self.error_code += 1
             LOG.error(e)
-            self.speak_dialog("error", data={"result": "right hand side,"})
+            if not silent_kw:
+                self.speak_dialog("error", data={"result": "right hand side,"})
         sleep(seq_delay)
         try:
             bulbLHS.turn_on()
         except Exception as e:
             self.error_code += 1
             LOG.error(e)
-            self.speak_dialog("error", data={"result": "left hand side,"})
+            if not silent_kw:
+                self.speak_dialog("error", data={"result": "left hand side,"})
         #sleep(seq_delay)
         #bulbLHS.set_rgb(255, 255, 255)
         #sleep(seq_delay)
@@ -112,14 +114,16 @@ class YeeLightSkill(MycroftSkill):
         except Exception as e:
             self.error_code += 1
             LOG.error(e)
-            self.speak_dialog("error", data={"result": "right hand side,"})
+            if not silent_kw:
+                self.speak_dialog("error", data={"result": "right hand side,"})
         sleep(seq_delay)
         try:
             bulbLHS.turn_off(duration=effect_delay)
         except Exception as e:
             self.error_code += 1
             LOG.error(e)
-            self.speak_dialog("error", data={"result": "left hand side,"})
+            if not silent_kw:
+                self.speak_dialog("error", data={"result": "left hand side,"})
         if self.error_code == 0:
             if not silent_kw:
                 self.speak_dialog("light.off")
@@ -132,14 +136,16 @@ class YeeLightSkill(MycroftSkill):
         except Exception as e:
             self.error_code += 1
             LOG.error(e)
-            self.speak_dialog("error", data={"result": "right hand side,"})
+            if not silent_kw:
+                self.speak_dialog("error", data={"result": "right hand side,"})
         sleep(seq_delay)
         try:
             bulbLHS.set_brightness(5, duration=effect_delay)
         except Exception as e:
             self.error_code += 1
             LOG.error(e)
-            self.speak_dialog("error", data={"result": "left hand side,"})
+            if not silent_kw:
+                self.speak_dialog("error", data={"result": "left hand side,"})
         if self.error_code == 0:
             if not silent_kw:
                 self.speak_dialog("light.dim")
@@ -161,14 +167,16 @@ class YeeLightSkill(MycroftSkill):
                 except Exception as e:
                     self.error_code += 1
                     LOG.error(e)
-                    self.speak_dialog("error", data={"result": "left hand side,"})
+                    if not silent_kw:
+                        self.speak_dialog("error", data={"result": "left hand side,"})
                 sleep(seq_delay)
                 try:
                     bulbRHS.set_rgb(myRed, myGreen, myBlue)
                 except Exception as e:
                     self.error_code += 1
                     LOG.error(e)
-                    self.speak_dialog("error", data={"result": "right hand side,"})
+                    if not silent_kw:
+                        self.speak_dialog("error", data={"result": "right hand side,"})
                 if self.error_code == 0:
                     if not silent_kw:
                         self.speak_dialog("light.set", data ={"result": findcolor})
@@ -181,14 +189,16 @@ class YeeLightSkill(MycroftSkill):
             except Exception as e:
                 self.error_code += 1
                 LOG.error(e)
-                self.speak_dialog("error", data={"result": "left hand side,"})
+                if not silent_kw:
+                    self.speak_dialog("error", data={"result": "left hand side,"})
             sleep(seq_delay)
             try:
                 bulbRHS.set_brightness(int(dim_level[0]), duration=effect_delay)
             except Exception as e:
                 self.error_code += 1
                 LOG.error(e)
-                self.speak_dialog("error", data={"result": "right hand side,"})
+                if not silent_kw:
+                    self.speak_dialog("error", data={"result": "right hand side,"})
             if self.error_code == 0:
                 if not silent_kw:
                     self.speak_dialog("light.set", data={"result": str(dim_level[0]) + ", percent"})
