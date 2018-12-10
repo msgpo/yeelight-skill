@@ -73,8 +73,12 @@ class YeeLightSkill(MycroftSkill):
 
     def load_transition(self, transition):
         # LOG.info("transition: " & transition)
+#        flow = Flow(
+#            count=10,
+#            transitions=strobe(),  # Call the transition preset to get the
+#            # transitions you like.
+#        )
         flow = Flow(
-            count=10,
             transitions=strobe(),  # Call the transition preset to get the
             # transitions you like.
         )
@@ -102,10 +106,10 @@ class YeeLightSkill(MycroftSkill):
         if transition == "strobe":
             if random.random() < 0.7:
                 bulbLHS.start_flow(flow)
-                bulbLHS.start_flow(flow)
+                bulbRHS.start_flow(flow)
             else:
                 bulbLHS.start_flow(flow)
-                bulbLHS.start_flow(flow)
+                bulbRHS.start_flow(flow)
 
     # The "handle_xxxx_intent" functions define Mycroft's behavior when
     # each of the skill's intents is triggered: in this case, he simply
