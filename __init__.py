@@ -227,8 +227,8 @@ class YeeLightSkill(MycroftSkill):
             if self.error_code == 0:
                 if not silent_kw:
                     self.speak_dialog("light.set", data={"result": str(dim_level[0]) + ", percent"})
-            if transition_kw:
-                self.load_transition(transition_kw.partition(' ')[0])
+        if transition_kw:
+            self.load_transition(transition_kw.partition(' ')[0])
 
     # The "stop" method defines what Mycroft does when told to stop during
     # the skill's execution. In this case, since the skill's functionality
