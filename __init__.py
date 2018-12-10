@@ -176,7 +176,7 @@ class YeeLightSkill(MycroftSkill):
 
     def handle_yee_light_set_intent(self, message):
         silent_kw = message.data.get("SilentKeyword")
-        transition_kw = message.data.get("TransitionKeyword")
+        transition_kw = str(message.data.get("TransitionKeyword"))
         self.error_code = 0
         str_remainder = str(message.utterance_remainder())
         for findcolor in Valid_Color:
@@ -229,6 +229,7 @@ class YeeLightSkill(MycroftSkill):
                     self.speak_dialog("light.set", data={"result": str(dim_level[0]) + ", percent"})
         if transition_kw:
             self.load_transition(transition_kw.partition(' ')[0])
+
 
     # The "stop" method defines what Mycroft does when told to stop during
     # the skill's execution. In this case, since the skill's functionality
