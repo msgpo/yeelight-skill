@@ -10,6 +10,7 @@ from mycroft.skills.core import MycroftSkill
 from mycroft.util.log import getLogger
 from mycroft.util.log import LOG
 from yeelight import Bulb
+from yeelight.transitions import *
 from time import sleep
 from colour import Color
 import math
@@ -30,7 +31,6 @@ effect_delay = 3500
 bulbRHS = Bulb("192.168.0.50")
 bulbLHS = Bulb("192.168.0.51")
 Valid_Color = ['red', 'read', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet', 'purple', 'white']
-
 
 # The logic of each skill is contained within its own class, which inherits
 # base methods from the MycroftSkill class with the syntax you can see below:
@@ -72,13 +72,14 @@ class YeeLightSkill(MycroftSkill):
         self.register_intent(yee_light_set_intent, self.handle_yee_light_set_intent)
 
     def load_transition(self, transition):
+        bulbLHS.t
         # LOG.info("transition: " & transition)
         if transition == "alarm":
-            bulbLHS.transitions.alarm(duration=250)
-            bulbRHS.transitions.alarm(duration=250)
+            bulbLHS.start_flow(alarm(duration=250))
+            bulbRHS.start_flow(alarm(duration=250))
         if transition == "christmas":
-            bulbLHS.transitions.christmas(duration=250, brightness=100, sleep=3000)
-            bulbRHS.transitions.christmas(duration=250, brightness=100, sleep=3000)
+            bulbLHS.start_flow(christmas(duration=250, brightness=100, sleep=3000))
+            bulbRHS.start_flow(christmas(duration=250, brightness=100, sleep=3000))
         if transition == "disco":
             bulbLHS.transitions.disco(bpm=120)
             bulbRHS.transitions.disco(bpm=120)
