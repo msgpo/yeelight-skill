@@ -229,7 +229,7 @@ class YeeLightSkill(MycroftSkill):
                     self.speak_dialog("light.set", data={"result": str(dim_level[0]) + ", percent"})
         if transition_kw:
             LOG.info(transition_kw)
-            Log.info(transition_kw.split(' ', 1)[0])
+            LOG.info(transition_kw.split(' ', 1)[0])
             self.load_transition(transition_kw.split(' ', 1)[0])
 
 
