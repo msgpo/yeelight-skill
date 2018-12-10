@@ -24,7 +24,7 @@ LOGGER = getLogger(__name__)
 
 # List each of the bulbs here
 seq_delay = 0.5
-effect_delay = 3000
+effect_delay = 3500
 
 bulbRHS = Bulb("192.168.0.50")
 bulbLHS = Bulb("192.168.0.51")
@@ -110,7 +110,7 @@ class YeeLightSkill(MycroftSkill):
         silent_kw = message.data.get("SilentKeyword")
         self.error_code = 0
         try:
-            bulbRHS.turn_off(duration="3000")
+            bulbRHS.turn_off(duration=effect_delay)
         except Exception as e:
             self.error_code += 1
             LOG.error(e)
@@ -118,7 +118,7 @@ class YeeLightSkill(MycroftSkill):
                 self.speak_dialog("error", data={"result": "right hand side,"})
         sleep(seq_delay)
         try:
-            bulbLHS.turn_off(duration="3000")
+            bulbLHS.turn_off(duration=effect_delay)
         except Exception as e:
             self.error_code += 1
             LOG.error(e)
@@ -132,7 +132,7 @@ class YeeLightSkill(MycroftSkill):
         silent_kw = message.data.get("SilentKeyword")
         self.error_code = 0
         try:
-            bulbRHS.set_brightness(5, duration="3000")
+            bulbRHS.set_brightness(5, duration=effect_delay)
         except Exception as e:
             self.error_code += 1
             LOG.error(e)
@@ -140,7 +140,7 @@ class YeeLightSkill(MycroftSkill):
                 self.speak_dialog("error", data={"result": "right hand side,"})
         sleep(seq_delay)
         try:
-            bulbLHS.set_brightness(5, duration="3000")
+            bulbLHS.set_brightness(5, duration=effect_delay)
         except Exception as e:
             self.error_code += 1
             LOG.error(e)
@@ -185,7 +185,7 @@ class YeeLightSkill(MycroftSkill):
         if dim_level:
             self.error_code = 0
             try:
-                bulbLHS.set_brightness(int(dim_level[0]), duration="3000")
+                bulbLHS.set_brightness(int(dim_level[0]), duration=effect_delay)
             except Exception as e:
                 self.error_code += 1
                 LOG.error(e)
@@ -193,7 +193,7 @@ class YeeLightSkill(MycroftSkill):
                     self.speak_dialog("error", data={"result": "left hand side,"})
             sleep(seq_delay)
             try:
-                bulbRHS.set_brightness(int(dim_level[0]), duration="3000")
+                bulbRHS.set_brightness(int(dim_level[0]), duration=effect_delay)
             except Exception as e:
                 self.error_code += 1
                 LOG.error(e)
