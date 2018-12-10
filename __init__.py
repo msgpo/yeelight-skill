@@ -9,7 +9,7 @@ from adapt.intent import IntentBuilder
 from mycroft.skills.core import MycroftSkill
 from mycroft.util.log import getLogger
 from mycroft.util.log import LOG
-from yeelight import Bulb
+from yeelight import Bulb, Flow
 from yeelight.transitions import *
 from time import sleep
 from colour import Color
@@ -73,6 +73,11 @@ class YeeLightSkill(MycroftSkill):
 
     def load_transition(self, transition):
         # LOG.info("transition: " & transition)
+        flow = Flow(
+            count=10,
+            transitions=strobe(),  # Call the transition preset to get the
+            # transitions you like.
+        )
         if transition == "alarm":
             bulbLHS.start_flow(alarm(duration=250))
             bulbRHS.start_flow(alarm(duration=250))
@@ -96,11 +101,11 @@ class YeeLightSkill(MycroftSkill):
             bulbRHS.transitions.randomloop(duration=750, brightness=100, count=9)
         if transition == "strobe":
             if random.random() < 0.7:
-                bulbLHS.transitions.strobe_color(brightness=100)
-                bulbRHS.transitions.strobe_color(brightness=100)
+                bulbLHS.start_flow(flow)
+                bulbLHS.start_flow(flow)
             else:
-                bulbLHS.transitions.strobe()
-                bulbRHS.transitions.strobe()
+                bulbLHS.start_flow(flow)
+                bulbLHS.start_flow(flow)
 
     # The "handle_xxxx_intent" functions define Mycroft's behavior when
     # each of the skill's intents is triggered: in this case, he simply
