@@ -72,7 +72,7 @@ class YeeLightSkill(MycroftSkill):
         self.register_intent(yee_light_set_intent, self.handle_yee_light_set_intent)
 
     def load_transition(self, transition):
-        LOG.info("transition: " & transition)
+        # LOG.info("transition: " & transition)
         if transition == "alarm":
             bulbLHS.transitions.alarm(duration=250)
             bulbRHS.transitions.alarm(duration=250)
@@ -229,8 +229,9 @@ class YeeLightSkill(MycroftSkill):
                     self.speak_dialog("light.set", data={"result": str(dim_level[0]) + ", percent"})
         if transition_kw:
             LOG.info(transition_kw)
-            LOG.info(transition_kw.split(' ', 1)[0])
-            self.load_transition(transition_kw.split(' ', 1)[0])
+            bulb_transition = str(transition_kw.split(' ', 1)[0])
+            LOG.info(bulb_transition)
+            self.load_transition(bulb_transition)
 
 
     # The "stop" method defines what Mycroft does when told to stop during
