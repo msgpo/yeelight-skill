@@ -14,6 +14,7 @@ from time import sleep
 from colour import Color
 import math
 import re
+import random
 
 
 __author__ = 'PCWii'
@@ -67,8 +68,39 @@ class YeeLightSkill(MycroftSkill):
         yee_light_set_intent = IntentBuilder("YeeLightSetIntent").\
             require("SetKeyword").require("DeviceKeyword").\
             optionally("LightKeyword"). \
-            optionally("SilentKeyword").build()
+            optionally("SilentKeyword").optionally("TransitionKeyword").build()
         self.register_intent(yee_light_set_intent, self.handle_yee_light_set_intent)
+
+    def load_transition(self, transition):
+        LOG.info("transition: " & transition)
+        if transition == "alarm":
+            bulbLHS.transitions.alarm(duration=250)
+            bulbRHS.transitions.alarm(duration=250)
+        if transition == "christmas":
+            bulbLHS.transitions.christmas(duration=250, brightness=100, sleep=3000)
+            bulbRHS.transitions.christmas(duration=250, brightness=100, sleep=3000)
+        if transition == "disco":
+            bulbLHS.transitions.disco(bpm=120)
+            bulbRHS.transitions.disco(bpm=120)
+        if transition == "lsd":
+            bulbLHS.transitions.lsd(duration=3000, brightness=100)
+            bulbRHS.transitions.lsd(duration=3000, brightness=100)
+        if transition == "police":
+            bulbLHS.transitions.police(duration=300, brightness=100)
+            bulbRHS.transitions.police(duration=300, brightness=100)
+        if transition == "pulse":
+            bulbLHS.transitions.pulse(0, 255, 0, duration=250, brightness=100)
+            bulbRHS.transitions.pulse(0, 255, 0, duration=250, brightness=100)
+        if transition == "random":
+            bulbLHS.transitions.randomloop(duration=750, brightness=100, count=9)
+            bulbRHS.transitions.randomloop(duration=750, brightness=100, count=9)
+        if transition == "strobe":
+            if random.random() < 0.7:
+                bulbLHS.transitions.strobe_color(brightness=100)
+                bulbRHS.transitions.strobe_color(brightness=100)
+            else:
+                bulbLHS.transitions.strobe()
+                bulbRHS.transitions.strobe()
 
     # The "handle_xxxx_intent" functions define Mycroft's behavior when
     # each of the skill's intents is triggered: in this case, he simply
@@ -94,14 +126,6 @@ class YeeLightSkill(MycroftSkill):
             LOG.error(e)
             if not silent_kw:
                 self.speak_dialog("error", data={"result": "left hand side,"})
-        #sleep(seq_delay)
-        #bulbLHS.set_rgb(255, 255, 255)
-        #sleep(seq_delay)
-        #bulbRHS.set_rgb(255, 255, 255)
-        #sleep(seq_delay)
-        #bulbRHS.set_brightness(100, duration=effect_delay)
-        #sleep(seq_delay)
-        #bulbLHS.set_brightness(100, duration=effect_delay)
         if self.error_code == 0:
             if not silent_kw:
                 self.speak_dialog("light.on")
@@ -152,6 +176,7 @@ class YeeLightSkill(MycroftSkill):
 
     def handle_yee_light_set_intent(self, message):
         silent_kw = message.data.get("SilentKeyword")
+        transition_kw = message.data.get("TransitionKeyword")
         self.error_code = 0
         str_remainder = str(message.utterance_remainder())
         for findcolor in Valid_Color:
@@ -202,6 +227,8 @@ class YeeLightSkill(MycroftSkill):
             if self.error_code == 0:
                 if not silent_kw:
                     self.speak_dialog("light.set", data={"result": str(dim_level[0]) + ", percent"})
+            if transition_kw:
+                self.load_transition(transition_kw.partition(' ')[0])
 
     # The "stop" method defines what Mycroft does when told to stop during
     # the skill's execution. In this case, since the skill's functionality
