@@ -72,7 +72,6 @@ class YeeLightSkill(MycroftSkill):
         self.register_intent(yee_light_set_intent, self.handle_yee_light_set_intent)
 
     def load_transition(self, transition):
-        bulbLHS.t
         # LOG.info("transition: " & transition)
         if transition == "alarm":
             bulbLHS.start_flow(alarm(duration=250))
