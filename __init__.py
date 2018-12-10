@@ -132,6 +132,7 @@ class YeeLightSkill(MycroftSkill):
         self.error_code = 0
         try:
             bulbRHS.turn_on()
+            bulbRHS.stop_flow()
         except Exception as e:
             self.error_code += 1
             LOG.error(e)
@@ -140,6 +141,7 @@ class YeeLightSkill(MycroftSkill):
         sleep(seq_delay)
         try:
             bulbLHS.turn_on()
+            bulbLHS.stop_flow()
         except Exception as e:
             self.error_code += 1
             LOG.error(e)
@@ -153,6 +155,7 @@ class YeeLightSkill(MycroftSkill):
         silent_kw = message.data.get("SilentKeyword")
         self.error_code = 0
         try:
+            bulbRHS.stop_flow()
             bulbRHS.turn_off(duration=effect_delay)
         except Exception as e:
             self.error_code += 1
@@ -161,6 +164,7 @@ class YeeLightSkill(MycroftSkill):
                 self.speak_dialog("error", data={"result": "right hand side,"})
         sleep(seq_delay)
         try:
+            bulbLHS.stop_flow()
             bulbLHS.turn_off(duration=effect_delay)
         except Exception as e:
             self.error_code += 1
