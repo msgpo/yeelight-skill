@@ -80,15 +80,16 @@ class YeeLightSkill(MycroftSkill):
 #        )
 
         if transition == "alarm":
-            bulbLHS.start_flow(alarm(duration=250))
-            bulbRHS.start_flow(alarm(duration=250))
+            bulbLHS.start_flow(Flow(transitions=alarm()))
+            bulbRHS.start_flow(Flow(transitions=alarm()))
         if transition == "christmas":
             flow = Flow(
                 transitions=christmas(),  # Call the transition preset to get the
                 # transitions you like.
             )
             bulbLHS.start_flow(flow)
-            bulbRHS.start_flow(flow)
+            sleep(3000)
+            bulbRHS.start_flow(Flow(transitions=christmas()))
         if transition == "disco":
             bulbLHS.transitions.disco(bpm=120)
             bulbRHS.transitions.disco(bpm=120)
