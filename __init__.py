@@ -83,43 +83,31 @@ class YeeLightSkill(MycroftSkill):
             bulbLHS.start_flow(Flow(transitions=alarm()))
             bulbRHS.start_flow(Flow(transitions=alarm()))
         if transition == "christmas":
-            flow = Flow(
-                transitions=christmas(),  # Call the transition preset to get the
-                # transitions you like.
-            )
-            bulbLHS.start_flow(flow)
-            sleep(3000)
+            bulbLHS.start_flow(Flow(transitions=christmas()))
+            sleep(3)
             bulbRHS.start_flow(Flow(transitions=christmas()))
         if transition == "disco":
-            bulbLHS.transitions.disco(bpm=120)
-            bulbRHS.transitions.disco(bpm=120)
+            bulbLHS.start_flow(Flow(transitions=disco()))
+            bulbRHS.start_flow(Flow(transitions=disco()))
         if transition == "lsd":
-            bulbLHS.transitions.lsd(duration=3000, brightness=100)
-            bulbRHS.transitions.lsd(duration=3000, brightness=100)
+            bulbLHS.start_flow(Flow(transitions=lsd()))
+            bulbRHS.start_flow(Flow(transitions=lsd()))
         if transition == "police":
-            bulbLHS.transitions.police(duration=300, brightness=100)
-            bulbRHS.transitions.police(duration=300, brightness=100)
+            bulbLHS.start_flow(Flow(transitions=police()))
+            bulbRHS.start_flow(Flow(transitions=police()))
         if transition == "pulse":
-            bulbLHS.transitions.pulse(0, 255, 0, duration=250, brightness=100)
-            bulbRHS.transitions.pulse(0, 255, 0, duration=250, brightness=100)
+            bulbLHS.start_flow(Flow(transitions=pulse()))
+            bulbRHS.start_flow(Flow(transitions=pulse()))
         if transition == "random":
-            bulbLHS.transitions.randomloop(duration=750, brightness=100, count=9)
-            bulbRHS.transitions.randomloop(duration=750, brightness=100, count=9)
+            bulbLHS.start_flow(Flow(transitions=randomloop()))
+            bulbRHS.start_flow(Flow(transitions=randomloop()))
         if transition == "strobe":
             if random.random() < 0.7:
-                flow = Flow(
-                    transitions=strobe(),  # Call the transition preset to get the
-                    # transitions you like.
-                )
-                bulbLHS.start_flow(flow)
-                bulbRHS.start_flow(flow)
+                bulbLHS.start_flow(Flow(transitions=strobe()))
+                bulbRHS.start_flow(Flow(transitions=strobe()))
             else:
-                flow = Flow(
-                    transitions=strobe_color(),  # Call the transition preset to get the
-                    # transitions you like.
-                )
-                bulbLHS.start_flow(flow)
-                bulbRHS.start_flow(flow)
+                bulbLHS.start_flow(Flow(transitions=strobe_color()))
+                bulbRHS.start_flow(Flow(transitions=strobe_color()))
 
     # The "handle_xxxx_intent" functions define Mycroft's behavior when
     # each of the skill's intents is triggered: in this case, he simply
